@@ -1,0 +1,34 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+
+
+# Importar ambas tablas de datos en python usando pandas. Poner la columna del índice en "MESS_DATUM" y analizar los valores de la columna como fechas.
+garmisch  = pd.read_csv("garmisch.txt",parse_dates=["MESS_DATUM"], index_col=["MESS_DATUM"], sep=";")
+zugspitze = pd.read_csv("zugspitze.txt",parse_dates=["MESS_DATUM"], index_col=["MESS_DATUM"], sep=";")
+garmisch.head()
+zugspitze.head()
+print(garmisch.index.name)
+# Recorta las tablas a el año 2018 [1P]
+garmisch.loc["2018"].head()
+zugspitze.loc["2018"].head()
+# Volver a muestrear los datos de temperatura a promedios mensuales (" TMK") y los datos de precipitaciones a sumas mensuales (" RSK"): [1P]
+garmisch_agg = garmisch.loc[:, [" TMK", " RSK"]].resample("M").agg({" TMK": "mean", " RSK": "sum"}).head()
+zugspitze_agg = zugspitze.loc[:, [" TMK", " RSK"]].resample("M").agg({" TMK": "mean", " RSK": "sum"}).head()
+# Define una función de trazado que dibuja un simple diagrama climático
+# Agrega los argumentos como se menciona en la lista de documentos abajo [1P]
+# Establece el rango de temperatura por defecto de -15°C a 20°C y el rango de precipitaciones de 0mm a 370mm [1P]
+temp = np.arange(-15,20)
+pre = np.arange(0,370)
+temperatura = np.random.choice(temp, 12)
+precipitacion = np.random.choice(pre, 12)
+meses = np.array(["ENE","FEB","MAR","ABRIL","MAY","JUN","JUL","AGOS","SEP","OCT","NOV","DIC"])
+lineas  =  plt . plot ( meses ,  temperatura ,  meses ,  precipitacion ) 
+l1 ,  l2  = lineas 
+
+plt. setp ( l1 ,  linewidth = 1 ,  color = 'r' )  
+plt. setp ( l2 ,  linewidth = 1 ,  color = 'b' )  
+plt.title("DIAGRAMA CLIMATICO") 
+
+plt.show()
